@@ -27,14 +27,32 @@ const KEYS = [
   "z",
 ];
 
-export const Keyboard = () => {
+type KeyboardProps = {
+  disabled?: boolean;
+  activeLetters: string[];
+  inactiveLetters: string[];
+  addGuessedLetter: (letter: string) => void;
+};
+
+export const Keyboard = ({
+  activeLetters,
+  inactiveLetters,
+  addGuessedLetter,
+  disabled = false,
+}: KeyboardProps) => {
   return (
     <div className="w-full flex flex-wrap items-center justify-center  gap-2">
       {KEYS.map((key) => {
+        const isActive = activeLetters.includes(key);
+        const isInactive = inactiveLetters.includes(key);
         return (
           <button
+            onClick={() => addGuessedLetter(key)}
             key={key}
-            className="w-[60px] border-2 border-gray-400 text-xl uppercase p-4 cursor-pointer rounded-lg hover:bg-slate-300 active:bg-blue-300 active:text-white inactive"
+            disabled={isInactive || isActive || disabled}
+            className={`w-14 h-14 border-2 border-gray-400 text-xl uppercase p-4 cursor-pointer rounded-lg hover:bg-slate-300 ${
+              isActive ? "active:bg-blue-300 active:text-white" : ""
+            } ${isInactive ? "opacity-50 pointer-events-none" : ""}`}
           >
             {key}
           </button>
